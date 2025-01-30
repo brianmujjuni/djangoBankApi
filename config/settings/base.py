@@ -1,7 +1,7 @@
 from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv, path
-
+from loguru import logger
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -88,7 +88,6 @@ PAWWSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.ScryptPasswordHasher",
-
 ]
 
 # Password validation
@@ -124,8 +123,6 @@ USE_TZ = True
 SITE_ID = 1
 
 
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -136,3 +133,30 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGURU_LOGGING = {
+    "handlers": [
+        {
+            "sink": BASE_DIR / "logs/debug.log",
+            "level": "DEBUG",
+            "filter": lambda record: record["level"].no <= logger.level("WARNING").no,
+            "format": "{time: YYYY-MM-DD HH:mm:ss.SSS} | {level: <8 } | {name}:{function}:{line} - {message}",
+            "rotation": "10MB",
+            "retention": "30 days",
+            "compression": "zip",
+        },
+         {
+            "sink": BASE_DIR / "logs/error.log",
+            "level": "ERROR",
+            "format": "{time: YYYY-MM-DD HH:mm:ss.SSS} | {level: <8 } | {name}:{function}:{line} - {message}",
+            "rotation": "10MB",
+            "retention": "30 days",
+            "compression": "zip",
+            "backtrace": True,
+            "diagnose": True,
+        },
+
+    ],
+}
+
+logger.configure(**LOGURU_LOGGING)
