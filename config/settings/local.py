@@ -8,7 +8,7 @@ ocal_env_file = path.join(BASE_DIR, ".envs", ".env.local")
 if path.isfile(local_env_file):
     load_dotenv(local_env_file)
 
-SECRET_KEY = getenv("SECRET_key")
+SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv("DEBUG")

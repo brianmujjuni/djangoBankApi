@@ -31,9 +31,10 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "drf_spectacular",
     "djoser",
-    "cloudniary",
+    "cloudinary",
     "django_filters",
-    "django_email" "django_celery_beat",
+    "djcelery_email",
+    "django_celery_beat",
 ]
 
 LOCAL_APPS = []
