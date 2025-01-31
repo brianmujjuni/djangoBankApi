@@ -8,7 +8,7 @@ services:
       - ./staticfiles:/app/staticfiles
     ports:
       - "8000:8000"
-    evn_file: 
+    env_file: 
       - ./.envs/.env.local
     depends_on:
       - postgres
@@ -44,10 +44,10 @@ services:
     networks:
       - banker_local_nw
 
-  networks:
-    banker_local_nw:
-      external: true
-      
-  volumes:
-    banker_local_db:
-    banker_mailpit_db:
+networks:
+  banker_local_nw:
+    external: true
+
+volumes:
+  banker_local_db:
+  banker_mailpit_db:
