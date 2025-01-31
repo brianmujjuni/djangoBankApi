@@ -160,3 +160,16 @@ LOGURU_LOGGING = {
 }
 
 logger.configure(**LOGURU_LOGGING)
+lOGGING={
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "loguru": {
+            "class": "interceptor.InterceptHandler",
+        },
+    },
+    "root": {
+        "handlers": ["loguru"],
+        "level": "DEBUG",
+    },
+}
