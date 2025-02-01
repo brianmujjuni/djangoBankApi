@@ -54,3 +54,5 @@ volumes:
 
   #to run the services
   # docker compose -f local.yml config
+  #run this command to run all services in the local.yml file and build the images
+  # docker compose -f local.yml up  --build -d --remove-orphans
