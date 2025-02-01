@@ -25,8 +25,10 @@ python << END
     except psycopg2.OperationalError as error:
         sys.stderr.write("Waiting for PostgresSql to become available...\n")
         if time.time() - start > suggest_unrecoverable_after:
-            sys.stderr.write("PostgresSql is taking an unusually long time to become available. error: '{}'\n".format(error))
-            time.sleep(3)
+            sys.stderr.write(
+                "PostgresSql is taking an unusually long time to become available".
+                "error: '{}'\n".format(error))
+        time.sleep(3)
 END
 
 echo >&2 'PostgresSql is available'
