@@ -1,23 +1,28 @@
-from django.db import models
 import uuid
-from djanbgo.conf import settings
+from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from .emails import send_account_locked_email
 from .managers import UserManager
 
 
-# Create your models here.
 class User(AbstractUser):
-    class SecurityQuestion(models.TextChoices):
-        MAIDEN_NAME = ("maiden_name", _("What is your mother's maiden name?"))
-        FAVORITE_COLOR = ("favorite_color", _("What is your favorite color?"))
+    class SecurityQuestions(models.TextChoices):
+        MAIDEN_NAME = (
+            "maiden_name",
+            _("What is your mother's maiden name?"),
+        )
+        FAVORITE_COLOR = (
+            "favorite_color",
+            _("What is your favorite color?"),
+        )
         BIRTH_CITY = ("birth_city", _("What is the city where you were born?"))
         CHILDHOOD_FRIEND = (
             "childhood_friend",
-            _("What is the name of your childhood friend?"),
+            _("What is the name of your childhood best friend?"),
         )
 
     class AccountStatus(models.TextChoices):
@@ -26,17 +31,19 @@ class User(AbstractUser):
 
     class RoleChoices(models.TextChoices):
         CUSTOMER = "customer", _("Customer")
-        ACCOUNT_EXCECUTIVE = "account_executive", _("Account Executive")
+        ACCOUNT_EXECUTIVE = "account_executive", _("Account Executive")
         TELLER = "teller", _("Teller")
-        BRANCH_MANAGER = "branch_manger", _("Branch Manager")
+        BRANCH_MANAGER = "branch_manager", _("Branch Manager")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(_("Username"), max_length=12, unique=True)
     security_question = models.CharField(
-        _("Security Question"), max_length=30, choices=SecurityQuestion.choices
+        _("Security Question"),
+        max_length=30,
+        choices=SecurityQuestions.choices,
     )
-    security_question = models.CharField(_("Security Answer"), max_length=30)
-    email = models.EmailField(_("Email"), unique=True, blank=True)
+    security_answer = models.CharField(_("Security Answer"), max_length=30)
+    email = models.EmailField(_("Email"), unique=True, db_index=True)
     first_name = models.CharField(_("First Name"), max_length=30)
     middle_name = models.CharField(
         _("Middle Name"), max_length=30, blank=True, null=True
@@ -58,7 +65,7 @@ class User(AbstractUser):
     failed_login_attempts = models.PositiveSmallIntegerField(default=0)
     last_failed_login = models.DateTimeField(null=True, blank=True)
     otp = models.CharField(_("OTP"), max_length=6, blank=True)
-    otp_expiry_time = models.DateTimeField(_("OPT Expiry Time"), null=True, blank=True)
+    otp_expiry_time = models.DateTimeField(_("OTP Expiry Time"), null=True, blank=True)
 
     objects = UserManager()
     USERNAME_FIELD = "email"
@@ -88,7 +95,7 @@ class User(AbstractUser):
         self.last_failed_login = timezone.now()
         if self.failed_login_attempts >= settings.LOGIN_ATTEMPTS:
             self.account_status = self.AccountStatus.LOCKED
-            self.save
+            self.save()
             send_account_locked_email(self)
         self.save()
 
@@ -106,26 +113,30 @@ class User(AbstractUser):
             self.save()
 
     @property
-    def is_locked_out(self)-> bool:
+    def is_locked_out(self) -> bool:
         if self.account_status == self.AccountStatus.LOCKED:
-            if(self.last_failed_login and (timezone.now() - self.last_failed_login) > settings.LOCKOUT_DURATION):
+            if (
+                self.last_failed_login
+                and (timezone.now() - self.last_failed_login)
+                > settings.LOCKOUT_DURATION
+            ):
                 self.unlock_account()
                 return False
             return True
         return False
-    
+
     @property
-    def full_name(self)-> str:
+    def full_name(self) -> str:
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.title().strip()
-    
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
         ordering = ["-date_joined"]
-    
-    def has_role(self,role_name: str)->None:
-        return hasattr(self,"role") and self.role == role_name
-    
+
+    def has_role(self, role_name: str) -> bool:
+        return hasattr(self, "role") and self.role == role_name
+
     def __str__(self) -> str:
         return f"{self.full_name} - {self.get_role_display()}"

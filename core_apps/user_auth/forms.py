@@ -24,7 +24,7 @@ class UserCreationForm(DjangoUserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if User.objects.filter(email=email).exists():
-            raise ValidationError(_("A user with that email already exists"))
+            raise ValidationError(_("A user with that email already exists."))
         return email
 
     def clean_id_no(self):
@@ -43,7 +43,7 @@ class UserCreationForm(DjangoUserCreationForm):
             if not security_question:
                 self.add_error(
                     "security_question",
-                    _("Security question is required for regular user"),
+                    _("Security question is required for regular users"),
                 )
             if not security_answer:
                 self.add_error(
@@ -78,13 +78,14 @@ class UserChangeForm(DjangoUserChangeForm):
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if User.objects.exclude(pk=self.instance.pk).filter(email=email).exists():
-            raise ValidationError(_("A user with that email already exists"))
+            raise ValidationError(_("A user with that email already exists."))
         return email
 
     def clean_id_no(self):
         id_no = self.cleaned_data.get("id_no")
         if User.objects.exclude(pk=self.instance.pk).filter(id_no=id_no).exists():
-            raise ValidationError(_("A user with that ID number already exists"))
+            raise ValidationError(_("A user with that ID number already exists."))
+        return id_no
 
     def clean(self):
         cleaned_data = super().clean()
@@ -96,7 +97,7 @@ class UserChangeForm(DjangoUserChangeForm):
             if not security_question:
                 self.add_error(
                     "security_question",
-                    _("Security question is required for regular user"),
+                    _("Security question is required for regular users"),
                 )
             if not security_answer:
                 self.add_error(

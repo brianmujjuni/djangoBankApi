@@ -4,13 +4,12 @@ from django.utils.translation import gettext_lazy as _
 from .models import User
 from .forms import UserChangeForm, UserCreationForm
 
-
-# Register your models here.
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     model = User
+
     list_display = [
         "email",
         "username",
@@ -21,10 +20,11 @@ class CustomUserAdmin(UserAdmin):
         "role",
     ]
     list_filter = ["email", "is_staff", "is_active", "role"]
+
     fieldsets = (
         (
             _("Login Credentials"),
-            {"fileds": ("username", "emails", "passeord")},
+            {"fields": ("username", "email", "password")},  # Fixed "fileds", "emails", and "passeord"
         ),
         (
             _("Personal Info"),
@@ -66,5 +66,6 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    search_fields = ["email","username","first_name","last_name"]
+
+    search_fields = ["email", "username", "first_name", "last_name"]
     ordering = ["email"]

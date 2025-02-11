@@ -6,7 +6,9 @@ from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-APP_DIR = BASE_DIR / "core_apps"
+
+APPS_DIR = BASE_DIR / "core_apps"
+
 local_env_file = path.join(BASE_DIR, ".envs", ".env.local")
 
 if path.isfile(local_env_file):
@@ -39,8 +41,6 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    # "core_apps.user_auth",
-    # "core_apps.user_profile"
     "core_apps.user_auth",
     
 ]
@@ -62,7 +62,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(APP_DIR / "templates")],
+        "DIRS": [str(APPS_DIR / "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -143,7 +143,8 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-AUTH_USER_MODEL = "user_app.User"
+AUTH_USER_MODEL = "user_auth.User"
+
 REST_FRAMEWORK ={
     "DEFAULT_SCHEMA_CLASS":"drf_spectacular.openapi.AutoSchema",
 }
@@ -156,7 +157,7 @@ SPECTACULAR_SETTINGS ={
     "LICENSE":{
         "name": "MIT License",
         "url": "https://opensource.org/license/mit",
-        
+
     }
 }
 
