@@ -144,6 +144,11 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user_app.User"
+REST_FRAMEWORK ={
+    "DEFAULT_SCHEMA_CLASS":"drf_spectacular.openapi.AutoSchema",
+}
+
+lOGGING_CONFIG = None
 LOGURU_LOGGING = {
     "handlers": [
         {
