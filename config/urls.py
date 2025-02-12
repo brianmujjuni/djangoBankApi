@@ -18,6 +18,6 @@ urlpatterns = [
     path("api/v1/schema/redoc",SpectacularRedocView.as_view(url_name="schema"),name="redoc")
 ]
 
-admin.site.site_header = "Automex Banck Admin"
+admin.site.site_header = "Automex Bank Admin"
 admin.site.site_title = "Automex Bank Admin Portal"
-admin.site.index_title = "Welcome to Automex Banck Admin Portal"
+admin.site.index_title = "Welcome to Automex Bank Admin Portal"
