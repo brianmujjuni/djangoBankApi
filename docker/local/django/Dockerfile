@@ -45,9 +45,14 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
 
 COPY --chown=django:django ./docker/local/django/entrypoint.sh /entrypoint.sh
 COPY --chown=django:django ./docker/local/django/start.sh /start.sh
+COPY --chown=django:django ./docker/local/django/celery/start.sh /start-celeryworker.sh
+COPY --chown=django:django ./docker/local/django/beat/start.sh /start-celerybeat.sh
+COPY --chown=django:django ./docker/local/django/flower/start.sh /start-flower.sh
 
-RUN sed -i 's/\r$//g' /entrypoint.sh /start.sh && \
-    chmod +x /entrypoint.sh /start.sh
+
+RUN sed -i 's/\r$//g' /entrypoint.sh /start.sh /start-celeryworker.sh /start-celerybeat.sh \
+    /start-flower.sh && \
+    chmod +x /entrypoint.sh /start.sh /start-celeryworker.sh /start-celerybeat.sh /start-flower.sh
 
 COPY --chown=django:django . ${APP_HOME}
 
