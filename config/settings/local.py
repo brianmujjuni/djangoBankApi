@@ -1,9 +1,9 @@
 from os import getenv ,path
 from dotenv import load_dotenv
-from .base import *
+from .base import * #noqa
 from .base import BASE_DIR
 
-ocal_env_file = path.join(BASE_DIR, ".envs", ".env.local")
+local_env_file = path.join(BASE_DIR, ".envs", ".env.local")
 
 if path.isfile(local_env_file):
     load_dotenv(local_env_file)

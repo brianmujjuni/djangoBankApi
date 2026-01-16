@@ -14,6 +14,7 @@ urlpatterns = [
     path(
         "api/v1/schema/swagger-ui",
         SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui"
     ),
     path("api/v1/schema/redoc",SpectacularRedocView.as_view(url_name="schema"),name="redoc")
 ]
@@ -21,3 +22,4 @@ urlpatterns = [
 admin.site.site_header = "Automex Bank Admin"
 admin.site.site_title = "Automex Bank Admin Portal"
 admin.site.index_title = "Welcome to Automex Bank Admin Portal"
+

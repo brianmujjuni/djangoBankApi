@@ -23,7 +23,7 @@ class User(AbstractUser):
         CHILDHOOD_FRIEND = (
             "childhood_friend",
             _("What is the name of your childhood best friend?"),
-        )
+        ) 
 
     class AccountStatus(models.TextChoices):
         ACTIVE = "active", _("Active")

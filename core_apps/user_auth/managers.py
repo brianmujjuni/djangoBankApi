@@ -22,7 +22,7 @@ def validate_email_address(email: str)-> None:
         validate_email(email)
     except ValidationError:
         raise ValidationError(_('Enter a valid email address'))
-
+ 
 class UserManager(DjangoUserManager):
     def _create_user(self,email: str,password: str,**extra_fileds: Any):
         if not email:
