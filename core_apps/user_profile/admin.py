@@ -128,7 +128,7 @@ class ProfileAdmin(admin.ModelAdmin):
         ]
         list_filter = ["relationship", "is_primary"]
         search_fields = [
-            "full_name",
+            "first_name",
             "phone_number",
             "first_name",
             "last_name",
