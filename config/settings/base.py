@@ -2,7 +2,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv, path
 from loguru import logger
-from datetime import timedelta,date
+from datetime import timedelta, date
 import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,7 +45,6 @@ LOCAL_APPS = [
     "core_apps.user_auth",
     "core_apps.common",
     "core_apps.user_profile",
-    
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -58,7 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "core_apps.user_auth.middleware.CustomHeaderMiddleware"
+    "core_apps.user_auth.middleware.CustomHeaderMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -148,26 +147,25 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user_auth.User"
-DEFAULT_BIRTH_DATE = date(1970,1,1)
-DEFAULT_DATE = date(2000,1,1)
-DEFAULT_EXPIRY_DATE = date(2028,1,1)
+DEFAULT_BIRTH_DATE = date(1970, 1, 1)
+DEFAULT_DATE = date(2000, 1, 1)
+DEFAULT_EXPIRY_DATE = date(2028, 1, 1)
 DEFAULT_COUNTRY = "UG"
 DEFAULT_PHONE_NUMBER = "+256700000000"
 
-REST_FRAMEWORK ={
-    "DEFAULT_SCHEMA_CLASS":"drf_spectacular.openapi.AutoSchema",
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-SPECTACULAR_SETTINGS ={
+SPECTACULAR_SETTINGS = {
     "TITLE": "Automex Bank API",
     "DESCRIPTION": "An API built for a banking system",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
-    "LICENSE":{
+    "LICENSE": {
         "name": "MIT License",
         "url": "https://opensource.org/license/mit",
-
-    }
+    },
 }
 # CONFIGURE CELERY QUE
 if USE_TZ:
@@ -181,7 +179,7 @@ CELERY_RESULT_BACKEND_MAX_RETRIES = 10
 CELERY_TASK_SEND_SENT_EVENT = True
 CELERY_RESULT_EXTENDED = True
 CELERY_RESULT_BACKEND_ALWAYS_RETRY = True
-CELERY_TASK_TIME_LIMIT =5 * 60
+CELERY_TASK_TIME_LIMIT = 5 * 60
 CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_WORKER_SEND_TASK_EVENTS = True
@@ -195,6 +193,13 @@ cloudinary.config(
     api_key=CLOUDINARY_API_KEY,
     api_secret=CLOUDINARY_API_SECRET,
 )
+
+COOKIE_NAME = "automex_auth_cookie"
+COOKIE_SAMESITE = "Lax"
+COOKIE_PATH = "/"
+COOKIE_HTTPONLY = True
+COOKIE_SECURE = getenv("COOKIE_SECURE","True") == "True"
+
 
 lOGGING_CONFIG = None
 
@@ -223,7 +228,7 @@ LOGURU_LOGGING = {
 }
 
 logger.configure(**LOGURU_LOGGING)
-lOGGING={
+lOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
@@ -236,4 +241,3 @@ lOGGING={
         "level": "DEBUG",
     },
 }
-
