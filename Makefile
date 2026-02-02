@@ -29,6 +29,9 @@ flush:
 
 network-inspect:
 	docker network inspect banker_local_nw
+	
+network-create:
+	docker network create banker_local_nw
 
 banker-db:
 	docker compose -f local.yml exec postgres psql --username=postgres --dbname=banker 

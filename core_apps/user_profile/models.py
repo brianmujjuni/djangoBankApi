@@ -179,7 +179,7 @@ class Profile(TimeStampedModel):
     def clean(self) -> None:
         super().clean()
         if self.id_issue_date and self.id_expiry_date:
-            if self.id_expiry_date <= self.id_isue_date:
+            if self.id_expiry_date <= self.id_issue_date:
                 raise ValidationError(_("ID expiry date must be after issue date."))
 
     def save(self, *args: Any, **kwargs: Any) -> None:
