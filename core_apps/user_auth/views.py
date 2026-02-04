@@ -175,3 +175,11 @@ class OTPVerifyView(APIView):
         set_auth_cookies(response, access_token, refresh_token)
         logger.info(f"Successful login with OTP: {user.email}")
         return response
+
+class loggoutAPIView(APIView):
+    def post(self,request,*args,**kwargs):
+        response = Response(status=status.HTTP_204_NO_CONTENT)
+        response.delete_cookie("access")
+        response.delete_cookie("refresh")
+        response.delete_cookie("logged_in")
+        return response
