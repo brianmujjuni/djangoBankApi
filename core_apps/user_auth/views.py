@@ -69,5 +69,38 @@ class CustomTokenCreateView(TokenCreateView):
             },
             status=status.HTTP_200_OK,
         )
-    
-    
+
+    def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except Exception as e:
+            email = request.data.get("email")
+            user = User.objects.filter(email=email).first()
+            if user:
+                user.handle_failed_login_attempt()
+                failed_attempts = user.failed_login_attempts
+                logger.error(
+                    f"Failed login attempt for user {email}. Attempt #{failed_attempts}."
+                )
+                if failed_attempts >= settings.LOGIN_ATTEMPTS:
+                    logger.warning(
+                        f"User {email} has been locked out due to too many failed login attempts."
+                    )
+                    return Response(
+                        {
+                            "error": f"Account is locked due to multiple failed login attempts."
+                            f" Please try again later after {settings.LOCKOUT_DURATION.total_seconds() / 60} minutes."
+                            f"An email has been sent with instructions to unlock your account."
+                        },
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
+            else:
+                logger.error(
+                    f"Failed login attempt for non-existent user with email {email}."
+                )
+            return Response(
+                {"error": "Your Login Crendentials are not correct."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return self._action(serializer)
