@@ -195,3 +195,7 @@ class LogoutAPIView(APIView):
         response.delete_cookie("refresh")
         response.delete_cookie("logged_in")
         return response
+    
+
+
+    
