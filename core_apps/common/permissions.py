@@ -30,3 +30,17 @@ class IsTeller(permissions.BasePermission):
             and has_role_attr
             and request.user.role == "teller"
         )
+
+class IsBranchManager(permissions.BasePermission):
+    """
+    Custom permission to only allow branch managers to access certain views.
+    """
+
+    def has_permission(self, request: Request, view: View) -> bool:
+        is_authenticated = request.user.is_authenticated
+        has_role_attr = hasattr(request.user, "role")
+        return (
+            is_authenticated
+            and has_role_attr
+            and request.user.role == "branch_manager"
+        )
