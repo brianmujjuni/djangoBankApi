@@ -202,7 +202,7 @@ class ProfileListSerializer(serializers.ModelSerializer):
             "nationality",
             "country_of_birth",
             "email",
-            "phone_number",
+            "phone_number", 
             "photo",
         ]
 
