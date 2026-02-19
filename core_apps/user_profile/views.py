@@ -137,3 +137,31 @@ class NextOfKinAPIView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer: NextOfKinSerializer) -> None:
         serializer.save()
+
+
+class NextOfKinDetailAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = NextOfKinSerializer
+    renderer_classes = [GenericJSONRenderer]
+    object_label = "next_of_kin"
+
+    def get_queryset(self) -> List[NextOfKin]:
+        return NextOfKin.objects.filter(profile=self.request.user.profile)
+
+    def get_object(self) -> NextOfKin:
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, pk=self.kwargs["pk"])
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def retrieve(self, request: Request, *args: Any, **kwargs: Request) -> Response:
+        isinstance = self.get_object()
+        serializer = self.get_serializer(isinstance)
+        return Response(serializer.data)
+
+    def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        partial = kwargs.pop("partial", False)
+        isinstance = self.get_object()
+        serializer = self.get_serializer(isinstance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
