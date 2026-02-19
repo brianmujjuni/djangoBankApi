@@ -100,6 +100,7 @@ class ProfileDetailAPIView(generics.RetrieveUpdateAPIView):
     def perform_update(self, serializer: ProfileSerializer) -> None:
         serializer.save()
 
+
 class NextOfKinAPIView(generics.ListCreateAPIView):
     serializer_class = NextOfKinSerializer
     pagination_class = StandardResultsSetPagination
@@ -107,15 +108,15 @@ class NextOfKinAPIView(generics.ListCreateAPIView):
     object_label = "next_of_kin"
 
     def get_queryset(self) -> List[NextOfKin]:
-        
+
         return NextOfKin.objects.filter(profile=self.request.user.profile)
 
     def get_serializer_context(self) -> dict[str, Any]:
         context = super().get_serializer_context()
         context["profile"] = self.request.user.profile
         return context
-    
-    def list(self, request: Request, *args: Any, **kwargs: Any)-> Response:
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         queryset = self.get_queryset()
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -124,3 +125,15 @@ class NextOfKinAPIView(generics.ListCreateAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+    def perform_create(self, serializer: NextOfKinSerializer) -> None:
+        serializer.save()
