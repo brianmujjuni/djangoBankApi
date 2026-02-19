@@ -92,9 +92,10 @@ class ProfileDetailAPIView(generics.RetrieveUpdateAPIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data)
-    def partial_update(self, request: Request, *args: Any, **kwargs: Any)-> Response:
-       kwargs["partial"] = True
-       return self.update(request, *args, **kwargs)
-    
-    def perform_update(self,serializer: ProfileSerializer) -> None:
+
+    def partial_update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        kwargs["partial"] = True
+        return self.update(request, *args, **kwargs)
+
+    def perform_update(self, serializer: ProfileSerializer) -> None:
         serializer.save()
