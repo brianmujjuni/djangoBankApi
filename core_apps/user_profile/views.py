@@ -165,3 +165,11 @@ class NextOfKinDetailAPIView(generics.RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+    def destroy(self, response: Request, *args: Any, **kwargs: Any) -> Response:
+        isinstance = self.get_object()
+        self.perform_destroy(isinstance)
+        return Response(
+            {"message": "Next of kin deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
